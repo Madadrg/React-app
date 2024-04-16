@@ -4,11 +4,12 @@ import University from './University/University';
 import Tutors from './Tutors/Tutors';
 import Cities from './Cities/Cities';
 import Faculties from './Faculties/Faculties';
+import { menuConfig } from './helpers/menu';
 
 function App() {
   return (
     <main>
-      <Sidebar />
+      <Sidebar data={menuConfig} />
       <section className="container">
         <University />
         <Tutors />

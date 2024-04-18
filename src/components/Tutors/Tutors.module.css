@@ -1,0 +1,17 @@
+.tutorContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.tutorName {
+  display: flex;
+  flex-direction: column;
+}
+
+.tutorContacts {
+  display: flex;
+  flex-direction: column;
+}

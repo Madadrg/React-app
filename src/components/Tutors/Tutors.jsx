@@ -1,61 +1,63 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Tutors.module.css'
-import { nanoid } from "nanoid";
+import Paper from '../Paper/Paper';
+import styles from './Tutors.module.css';
+import FormTutors from '../FormTutors/FormTutors';
+import ThemedButton from '../ThemedButton/ThemedButton';
 
-const Tutors = ({ tutors ) } => {
-    const [showForm, setShowForm] = useState(false);
-    const [tutorsData, setTutorsData] = useState(tutors);
+const Tutors = ({ tutors }) => {
+  const [showForm, setShowForm] = useState(false);
+  const [tutorsData, setTutorsData] = useState(tutors);
 
-    const renderTutorsPapers = () =>
-        tutorsData.map({ tutor }) => {
-        const id = nanoid();
-        return (
-        <Paper key={id}>
-            <div className={styles.tutorContainer}>
-             <div>
-            <p>{tutor.firstName}</p>
-            <p>{tutor.lastName}</p>
+  const handleRemoveTutor = id => {
+    setTutorsData(tutorsData.filter(tutor => tutor.id !== id));
+  };
+
+  const renderTutorsPapers = () =>
+    tutorsData.map(tutor => {
+      return (
+        <Paper key={tutor.id}>
+          <div className={styles.tutorsContainer}>
+            <div className={styles.tutorName}>
+              <p>{tutor.firstName}</p>
+              <p>{tutor.lastName}</p>
             </div>
+
             <div className={styles.tutorContacts}>
-            <p>{tutor.phone}</p>
-            <p>{tutor.email}</p>
-             <p>{tutor.city}</p>
+              <p>{tutor.phone}</p>
+              <p>{tutor.email}</p>
+              <p>{tutor.city}</p>
+            </div>
+
+            <p>{tutor.options}</p>
+
+            <ThemedButton onClick={() => handleRemoveTutor(tutor.id)}>
+              Remove Tutor
+            </ThemedButton>
           </div>
-                    
-             <p>{tutor.options}</p>
-             </div>
-</Paper>
-    )};
-};
+        </Paper>
+      );
+    });
 
-const handleFormSubmit = { abstractData } => {
-    setTutorsData([...tutorsData, abstractData]);  
-};
-    
-const renderAddNewTutorForm = () => (
-    <form>
-        <input type='text' name='surname' id='surname' placeholder='Surname' />
-        <input type='text' name="name" id="name" placeholder='Name' />
-        <input type='text' name="phoneNumber" id="phoneNumber" placeholder=" Phone Number" />
-        <input type='email' name="email" id="email" placeholder="Email" />
-        <input type='text' name="city" id="city" placeholder="City" />
-        <button onClick={handleFormSubmit}>Invite</button>
-    </form>
-);
+  const handleFormSubmit = newTutorData => {
+    setTutorsData([...tutorsData, newTutorData]);
+    setShowForm(false);
+  };
 
-return (
-<div className = { styles.wrapper }>
-    { renderTutorsPapers() }
-        {showForm ? (
-            renderAddNewTutorForm()
-        ) : (
-        <button onClick={() => setShowForm(true)}> Add Tutor</button>)}
-</div>
-);
+  return (
+    <>
+      <div className={styles.wrapper}>{renderTutorsPapers()}</div>
+      {showForm ? (
+        <FormTutors updateParentState={handleFormSubmit} />
+      ) : (
+        <ThemedButton onClick={() => setShowForm(true)}>Add Tutor</ThemedButton>
+      )}
+    </>
+  );
 };
 
 Tutors.propTypes = {
   tutors: PropTypes.arrayOf(PropTypes.object),
 };
+
 export default Tutors;
